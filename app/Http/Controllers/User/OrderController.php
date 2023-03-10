@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    public $directory;
+
+    public function __construct()
+    {
+        $this->directory = 'expert-user-panel';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('user.product.order');
+        return view($this->directory.'.product.order');
     }
 
     /**

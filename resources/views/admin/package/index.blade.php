@@ -18,7 +18,7 @@
                     <th style="width:auto;">Package Name</th>
                     <th style="width:auto;">Package Price</th>
                     <th style="width:auto;">Package Direct Income</th>
-                    <th style="width:auto;">Package Matching Income</th>
+                    <th style="width:auto;">Package Indirect Income</th>
                     <th style="width:auto;">Package Withdraw Limit</th>
                     <th style="width:auto;">Package Income Limit</th>
                     <th style="width:auto;">Action</th>
@@ -32,7 +32,7 @@
                     <td>{{$package->name}}</td>
                     <td>{{$package->price}}</td>
                     <td>{{$package->direct_income}}</td>
-                    <td>{{$package->matching_income}}</td>
+                    <td>{{$package->indirect_income}}</td>
                     <td>{{$package->withdraw_limit}}</td>
                     <td>{{$package->income_limit}}</td>
                     <td class="table-action">

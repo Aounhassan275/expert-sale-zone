@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class WithdrawController extends Controller
 {
+    public $directory;
+
+    public function __construct()
+    {
+        $this->directory = 'expert-user-panel';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class WithdrawController extends Controller
      */
     public function index()
     {
-        return view('user.withdraw.index');
+        return view($this->directory.'.withdraw.index');
 
     }
 
@@ -28,7 +34,7 @@ class WithdrawController extends Controller
      */
     public function create()
     {
-        return view('user.withdraw.create');
+        return view($this->directory.'.withdraw.create');
     }
 
     /**
@@ -89,7 +95,7 @@ class WithdrawController extends Controller
      */
     public function edit(Withdraw $withdraw)
     {
-        return view('user.withdraw.edit')->with('withdraw',$withdraw);
+        return view($this->directory.'.withdraw.edit')->with('withdraw',$withdraw);
     }
 
     /**
@@ -99,8 +105,9 @@ class WithdrawController extends Controller
      * @param  \App\Models\Withdraw  $withdraw
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Withdraw $withdraw)
+    public function update(Request $request,$id)
     {
+        $withdraw = Withdraw::find($id);
         $withdraw->update($request->all());
         toastr()->warning('Withdraw Informations Updated successfully');
         return redirect()->back();

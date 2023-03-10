@@ -73,7 +73,7 @@
     </div>
     <div class="col-lg-6 px-4 px-xl-5 py-5 border-top">
       <h2 class="h4 mb-4">Drop us a line</h2>
-      <form class="needs-validation mb-3" action="{{route('admin.message.store')}}"  novalidate>
+      <form class="needs-validation mb-3"  method="POST"  action="{{route('admin.message.store')}}"  novalidate>
         @csrf
         <div class="row g-3">
           <div class="col-sm-6">

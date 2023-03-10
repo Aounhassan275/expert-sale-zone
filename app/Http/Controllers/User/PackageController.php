@@ -9,9 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class PackageController extends Controller
 {
+  
+  public $directory;
+
+  public function __construct()
+  {
+      $this->directory = 'expert-user-panel';
+  }
     public function payment($package)
     {
-      return view('user.package.payment')->with('package',$package);
+      return view($this->directory.'.package.payment')->with('package',$package);
     }
     public function index()
     {
@@ -20,10 +27,10 @@ class PackageController extends Controller
         toastr()->warning('Already Purchase Package');
         return redirect()->route('user.dashboard.index');
       } 
-      return view('user.package.index');
+      return view($this->directory.'.package.index');
     }
     public function upgrade()
     {
-      return view('user.package.upgrade');
+      return view($this->directory.'.package.upgrade');
     }
 }

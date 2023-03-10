@@ -35,20 +35,20 @@ class DepositController extends Controller
         ]);
         $direct_income = $deposit->amount/100 * 40;
         $matching_income = $deposit->amount/100 * 10;
-        if($user->refer_by && $user->checkStatus() == 'fresh')
-        {
-            $refer_by = User::find($user->refer_by);
-            if($user->refer_type == 'Left')
-            { 
-                RefferralHelper::DirectLeftRefferral($user,$refer_by,$direct_income,$matching_income);
-            }
-            else{
-                RefferralHelper::DirectRightRefferral($user,$refer_by,$direct_income,$matching_income);
-            }    
-            $flash_income->update([
-                'balance' => $flash_income->balance -= $direct_income,
-            ]);
-        }
+        // if($user->refer_by && $user->checkStatus() == 'fresh')
+        // {
+        //     $refer_by = User::find($user->refer_by);
+        //     if($user->refer_type == 'Left')
+        //     { 
+        //         RefferralHelper::DirectLeftRefferral($user,$refer_by,$direct_income,$matching_income);
+        //     }
+        //     else{
+        //         RefferralHelper::DirectRightRefferral($user,$refer_by,$direct_income,$matching_income);
+        //     }    
+        //     $flash_income->update([
+        //         'balance' => $flash_income->balance -= $direct_income,
+        //     ]);
+        // }
         $user->update([
             'status' => 'active',
             'a_date' => Carbon::today(),

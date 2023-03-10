@@ -8,24 +8,35 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use Session;
 
 class AuthController extends Controller
 {
+    public $directory;
+
+    public function __construct()
+    {
+        $this->directory = 'expert-user-panel';
+    }
+    public function loginView()
+    {
+        return view($this->directory.'.auth.login');
+    }
+    public function registerView()
+    {
+        return view($this->directory.'.auth.register');
+    }
     public function login(Request $request){
         $user = User::where('name',$request->name)->first();
         if($user){
             if($user->status == 'block')
             {
-            toastr()->warning('You are Blocked,Kindly Contact Support');
-            return redirect()->back();
-             }
+                toastr()->error('You are Blocked,Kindly Contact Support');
+                return redirect()->back();
+            }
         }
-
-
-        $user = User::where('name',$request->name)->first();
         if(!$user){
-            toastr()->warning('Please register your account');
+            toastr()->error('Please register your account');
             return redirect()->back();
         }
 
@@ -41,10 +52,10 @@ class AuthController extends Controller
             //         $user->status == 'pending';
             //     }
             // }
-            toastr()->warning('Login Successfully');
+            toastr()->success('Login Successfully');
             return redirect('user/dashboard');
         } else {
-            toastr()->warning('Wrong Password','Please Contact Support');
+            toastr()->error('Wrong Password','Please Contact Support');
             return redirect()->back();
             
         }
@@ -53,7 +64,7 @@ class AuthController extends Controller
     {
         if($request->password != $request->confirm_password)
         {
-            toastr()->warning('Password do not match');
+            toastr()->error('Password do not match');
             return redirect()->back();
         }
         if($request->code)

@@ -32,7 +32,7 @@
                         </div>
                         <div class="form-group col-6">
                             <label class="form-label">Package Matching Income</label>
-                            <input type="number" class="form-control" name="matching_income"  placeholder="Package Matching Income" value="">
+                            <input type="number" class="form-control" name="indirect_income"  placeholder="Package Matching Income" value="">
                         </div>
                     </div>
                    <div class="row">

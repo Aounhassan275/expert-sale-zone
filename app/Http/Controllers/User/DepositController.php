@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Auth;
 
 class DepositController extends Controller
 {
+    public $directory;
+
+    public function __construct()
+    {
+        $this->directory = 'expert-user-panel';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +37,7 @@ class DepositController extends Controller
         $package= Package::find($package);
         $payment= Payment::find($payment);
 
-        return view('user.deposit.index')
+        return view($this->directory.'.deposit.index')
             ->with('payment',$payment)
             ->with('package',$package);
     }
@@ -213,7 +219,7 @@ class DepositController extends Controller
                                 Earning::create([
                                     "user_id" => $chain->id,
                                     "price" => $amount,
-                                    "type" => 'matching_income'
+                                    "type" => 'indirect_income'
                                 ]);
                                 $company_account->update([
                                     'balance' => $company_account->balance -= $amount,

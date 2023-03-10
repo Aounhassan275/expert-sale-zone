@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group col-6">
                             <label class="form-label">Package Matching Income</label>
-                            <input type="number" class="form-control" name="matching_income"  placeholder="Package Matching Income" value="{{$package->matching_income}}">
+                            <input type="number" class="form-control" name="indirect_income"  placeholder="Package Indirect Income" value="{{$package->indirect_income}}">
                         </div>
                     </div>
                    <div class="row">

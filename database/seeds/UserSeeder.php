@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
             'updated_at' => Carbon::now()],
         ]);
         DB::table('users')->insert([
-            [ 'name' => 'aounshah1',
+            [ 'name' => 'user1',
             'email' => 'user1@mail.com',
             'password' => Hash::make('1234'),
             'left' => uniqid(),
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()],
             
-            ['name' => 'aounhassan1',
+            ['name' => 'user2',
             'email' => 'user2@mail.com',
             'password' => Hash::make('1234'),
             'left' => uniqid(),
@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
         DB::table('payments')->insert([
             [
                 'name' => 'Name 1',
-                'number' => '03030672683',
+                'number' => '123123123123',
                 'method' => 'PerfectMoney',
                 'bnumber' => '132123123123',
             ],
@@ -89,7 +89,7 @@ class UserSeeder extends Seeder
             [ 'price' => '1000',
             'name' => 'Package 1',
             'direct_income' => '40',
-            'matching_income' => '40',
+            'indirect_income' => '40',
             'withdraw_limit' => '1000',
             'income_limit' => '1000',
             'created_at' => Carbon::now(),

@@ -24,14 +24,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (App\Models\Earning::matching_income() as $key => $matching_income)
+                @foreach (App\Models\Earning::indirect_income() as $key => $indirect_income)
                 <tr> 
                     <td>{{$key+1}}</td>
-                    <td>{{$matching_income->user->name}}</td>
-                    <td>{{$matching_income->user->email}}</td>
-                    <td>{{@$matching_income->user->package->name}}</td>
-                    <td>{{$matching_income->price}}</td>
-                    <td>{{Carbon\Carbon::parse($matching_income->created_at)->format('d M,Y')}}</td> 
+                    <td>{{$indirect_income->user->name}}</td>
+                    <td>{{$indirect_income->user->email}}</td>
+                    <td>{{@$indirect_income->user->package->name}}</td>
+                    <td>{{$indirect_income->price}}</td>
+                    <td>{{Carbon\Carbon::parse($indirect_income->created_at)->format('d M,Y')}}</td> 
                 </tr>
                 @endforeach
             </tbody>

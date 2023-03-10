@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public $directory;
+
+    public function __construct()
+    {
+        $this->directory = 'expert-user-panel';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.profile.index');
+        return view($this->directory.'.profile.index');
     }
 
     /**
@@ -112,7 +118,7 @@ class UserController extends Controller
         }else{
             $referrals = User::where('refer_by',$main_user->id)->orWhere('main_owner',$main_user->id)->orderBy('created_at','DESC')->paginate();
         }
-        return view('user.refer.index')->with('main_user',$main_user)->with('referrals',$referrals);
+        return view($this->directory.'.refer.index')->with('main_user',$main_user)->with('referrals',$referrals);
     }
     public function refferral_detail(Request $request,$id)
     {
@@ -131,7 +137,7 @@ class UserController extends Controller
         }else{
             $referrals = User::where('refer_by',$main_user->id)->orWhere('main_owner',$main_user->id)->orderBy('created_at','DESC')->get();
         }
-        return view('user.refer.index')->with('main_user',$main_user)->with('referrals',$referrals);
+        return view($this->directory.'.refer.index')->with('main_user',$main_user)->with('referrals',$referrals);
     }
     public function left_refferal($id)
     {
@@ -141,7 +147,7 @@ class UserController extends Controller
           toastr()->warning('User Package is Expire');
            return redirect(route('user.dashboard.index'));
         }
-        return view('user.refer.left_refferal')->with('main_user',$main_user);
+        return view($this->directory.'.refer.left_refferal')->with('main_user',$main_user);
     }
     public function right_refferal($id)
     {
@@ -151,7 +157,7 @@ class UserController extends Controller
           toastr()->warning('User Package is Expire');
            return redirect(route('user.dashboard.index'));
         }
-        return view('user.refer.right_refferal')->with('main_user',$main_user);
+        return view($this->directory.'.refer.right_refferal')->with('main_user',$main_user);
     }
     public function showTree($id)
     {
@@ -238,7 +244,7 @@ class UserController extends Controller
             $right = User::find($user->right_refferal);
         }
         // dd($user);
-        return view('user.refer.new_tree')->with('user',$user)->with('left',$left)->with('right',$right);
+        return view($this->directory.'.refer.new_tree')->with('user',$user)->with('left',$left)->with('right',$right);
     }
     
 }

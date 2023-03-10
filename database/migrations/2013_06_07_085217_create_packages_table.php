@@ -18,7 +18,7 @@ class CreatePackagesTable extends Migration
             $table->text('name');
             $table->float('price')->nullable();
             $table->float('direct_income')->nullable();
-            $table->float('matching_income')->nullable();
+            $table->float('indirect_income')->nullable();
             $table->float('withdraw_limit')->nullable();
             $table->float('income_limit')->nullable();
             $table->timestamps();

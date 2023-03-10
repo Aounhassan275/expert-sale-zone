@@ -9,19 +9,25 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     
+    public $directory;
+
+    public function __construct()
+    {
+        $this->directory = 'expert-user-panel';
+    }
     public function showProducts()
     {
         $products = Product::paginate(30);
-        return view('user.product.index',compact('products'));
+        return view($this->directory.'.product.index',compact('products'));
     }
     public function showProductDetails($name)
     {
         $product = Product::where('name',str_replace('_', ' ',$name))->first();
-        return view('user.product.show',compact('product'));
+        return view($this->directory.'.product.show',compact('product'));
     }
     public function orderProducts($id)
     {
         $product = Product::find($id);
-        return view('user.product.create_order',compact('product'));
+        return view($this->directory.'.product.create_order',compact('product'));
     }
 }

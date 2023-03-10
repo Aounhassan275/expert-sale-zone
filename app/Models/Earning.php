@@ -17,8 +17,8 @@ class Earning extends Model
     {
         return (New static)::where('type','direct_income')->get();
     }
-    public static function matching_income()
+    public static function indirect_income()
     {
-        return (New static)::where('type','matching_income')->get();
+        return (New static)::where('type','indirect_income')->get();
     }
 }

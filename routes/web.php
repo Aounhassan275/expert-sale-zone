@@ -104,10 +104,10 @@ Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin'], funct
 Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function () {
  
     /*******************LOGIN ROUTES*************/
-    Route::view('login', 'user.auth.login')->name('login');
+    Route::get('login', 'AuthController@loginView')->name('login');
     Route::post('login','AuthController@login');
      /******************REGISTERED ROUTES****************/
-    Route::view('register', 'user.auth.register')->name('register');
+    Route::get('register', 'AuthController@registerView')->name('register');
     Route::view('verification', 'user.auth.forget')->name('verification');
     Route::view('reset', 'user.auth.reset')->name('reset');
     Route::post('register','AuthController@register')->name('register');
@@ -118,7 +118,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     /*******************Logout ROUTES*************/       
     Route::get('logout','AuthController@logout')->name('logout');
     /*******************Dashoard ROUTES*************/
-    Route::view('dashboard', 'user.dashboard.index')->name('dashboard.index');
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard.index');
     /******************PACKAGE ROUTES****************/
     Route::get('package', 'PackageController@index')->name('package.index');
     Route::get('package/upgrade', 'PackageController@upgrade')->name('package.upgrade');
@@ -132,25 +132,16 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::get('right_refferal/{id}','UserController@right_refferal');
     Route::get('tree/{id}','ReferralController@showTree')->name('tree.show');
     /******************Deposit  ROUTES****************/
-       Route::resource('deposit', 'DepositController');
-       /******************Withdraw  ROUTES****************/
-       Route::resource('withdraw', 'WithdrawController');  
-       /******************USER PROFILE  ROUTES****************/
-       Route::resource('user', 'UserController');  
-       /******************DONATION  ROUTES****************/
-       Route::resource('donation', 'DonationController');  
-       /******************Ad  ROUTES****************/
-       Route::get('user/show/ad', 'AdController@show')->name('ad.index');
-       Route::post('user/ad/verify/{id}', 'AdController@ad_verify')->name('ad.store');
-       Route::view('daily', 'user.ad.daily')->name('ad.daily');
-       Route::view('referral', 'user.ad.referral')->name('ad.referral');
-        /*******************Video ROUTES*************/
-    Route::view('video', 'user.video.index')->name('video.index');
+    Route::resource('deposit', 'DepositController');
+    /******************Withdraw  ROUTES****************/
+    Route::resource('withdraw', 'WithdrawController');  
+    /******************USER PROFILE  ROUTES****************/
+    Route::resource('user', 'UserController');  
     /*******************Balance Transfer ROUTES*************/
     Route::get('balance_transfer', 'TranscationController@balance_transfer')->name('balance_transfer.index');
      /*******************Referral ROUTES*************/ 
-    Route::view('direct_earning', 'user.earning.direct'); 
-    Route::view('matching_earning', 'user.earning.matching'); 
+    Route::get('direct_earning', 'EarningController@directEarning'); 
+    Route::get('indirect_earning', 'EarningController@indirectEarning'); 
     
     Route::get('products', 'ProductController@showProducts')->name('product.index');
     Route::get('product/{name}', 'ProductController@showProductDetails')->name('product.show');
