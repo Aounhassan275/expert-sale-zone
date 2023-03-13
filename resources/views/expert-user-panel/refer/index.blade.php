@@ -4,6 +4,24 @@ Refferrals
 @endsection
 @section('content')
 <div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="body">
+                <div class="row clearfix">
+                    <div class="col-sm-6">
+                        <div class="form-group">           
+                            <label for="">Copy Link For Referral</label>      
+                            <input type="text" class="form-control" id="link_area"  value="{{url('user/register',Auth::user()->refferral_link)}}"  readonly>                   
+                            <br>
+                            <button type="button" class="copy-button btn btn-dark  btn-sm" data-clipboard-action="copy" data-clipboard-target="#link_area">Copy to clipboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
     <div class="col-lg-12">
         <div class="card">
             <div class="header">
@@ -77,4 +95,21 @@ Refferrals
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<script type="text/javascript" src="{{asset('clipboard.js')}}"></script>
+<script type="text/javascript">
+	var clipboard = new Clipboard('.copy-button');
+        clipboard.on('success', function(e) {
+            copyText.select();
+            var $div2 = $("#coppied");
+            console.log($div2);
+            console.log($div2.is(":visible"));
+            if ($div2.is(":visible")) { return; }
+            $div2.show();
+            setTimeout(function() {
+                $div2.fadeOut();
+            }, 800);
+        });
+</script>
 @endsection

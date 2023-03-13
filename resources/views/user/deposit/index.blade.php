@@ -31,8 +31,7 @@
                     <div id="customer_details" class="col2-set">
                         <div class="col-1">
                             <div class="woocommerce-billing-fields">
-                                <input type="hidden" name="pakage_id" value="{{$package}}">
-                                <input type="hidden" name="method" value="{{$payment}}">
+                                <input type="hidden" name="payment" value="{{$payment->method}}">
                                 <input type="hidden" class="form-control text-violet" name="package_id" value="{{$package->id}}">
                                 
                                 <p id="billing_first_name_field" class="form-row form-row-first validate-required">

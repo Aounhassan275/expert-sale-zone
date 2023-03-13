@@ -21,57 +21,44 @@ class DepositController extends Controller
         $deposit = Deposit::find($id);
         $user = $deposit->user; 
         $package = Package::find($deposit->package_id);
-        $flash_income= CompanyAccount::flash_income();
-        $flash_income->update([
-            'balance' => $flash_income->balance += $deposit->amount/100 * 40,
-        ]);
-        $product_income= CompanyAccount::product_income();
-        $product_income->update([
-            'balance' => $product_income->balance += $deposit->amount/100 * 40,
-        ]);
-        $matching_income= CompanyAccount::matching_income();
-        $matching_income->update([
-            'balance' => $matching_income->balance += $deposit->amount/100 * 10,
-        ]);
-        $direct_income = $deposit->amount/100 * 40;
-        $matching_income = $deposit->amount/100 * 10;
-        // if($user->refer_by && $user->checkStatus() == 'fresh')
-        // {
-        //     $refer_by = User::find($user->refer_by);
-        //     if($user->refer_type == 'Left')
-        //     { 
-        //         RefferralHelper::DirectLeftRefferral($user,$refer_by,$direct_income,$matching_income);
-        //     }
-        //     else{
-        //         RefferralHelper::DirectRightRefferral($user,$refer_by,$direct_income,$matching_income);
-        //     }    
-        //     $flash_income->update([
-        //         'balance' => $flash_income->balance -= $direct_income,
-        //     ]);
-        // }
+        if($user->refer_by && $user->checkStatus() == 'fresh')
+        {
+            if(!$user->notInTree())
+            {
+                toastr()->error('User is Already in Tree Successfully');
+                return back();
+            }
+            $refer_by = User::find($user->refer_by);
+            RefferralHelper::addUserInTree($user,$package,$refer_by); 
+        }
         $user->update([
             'status' => 'active',
             'a_date' => Carbon::today(),
             'package_id' => $deposit->package_id
         ]);
-        $flash_income->update([
-            'balance' => $flash_income->balance += $deposit->amount/100 * 1,
+        $product_income= CompanyAccount::product_income();
+        $product_income->update([
+            'balance' => $product_income->balance += $package->product_income,
         ]);
         $expense_income= CompanyAccount::expense_income();
         $expense_income->update([
-            'balance' => $expense_income->balance += $deposit->amount/100 * 6,
+            'balance' => $expense_income->balance += $package->expense_income,
+        ]);
+        $flash_income= CompanyAccount::flash_income();
+        $flash_income->update([
+            'balance' => $flash_income->balance += $package->flash_income,
         ]);
         $reward_income= CompanyAccount::reward_income();
         $reward_income->update([
-            'balance' => $reward_income->balance += $deposit->amount/100 * 1,
+            'balance' => $reward_income->balance += $package->reward_income,
         ]);
         $loss_income= CompanyAccount::loss_income();
         $loss_income->update([
-            'balance' => $loss_income->balance += $deposit->amount/100 * 1,
+            'balance' => $loss_income->balance += $package->loss_income,
         ]);
         $salary= CompanyAccount::salary();
         $salary->update([
-            'balance' => $salary->balance += $deposit->amount/100 * 1,
+            'balance' => $salary->balance += $package->salary,
         ]);
         $deposit->update([
             'status' => 'old'

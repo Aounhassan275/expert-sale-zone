@@ -32,10 +32,40 @@
                             <input type="number" class="form-control" name="direct_income"  placeholder="Package Direct Income" value="{{$package->direct_income}}">
                         </div>
                         <div class="form-group col-6">
-                            <label class="form-label">Package Matching Income</label>
+                            <label class="form-label">Package Indirect Income</label>
                             <input type="number" class="form-control" name="indirect_income"  placeholder="Package Indirect Income" value="{{$package->indirect_income}}">
                         </div>
                     </div>
+                    <div class="row">
+                         <div class="form-group col-6">
+                             <label class="form-label">Package Indirect Level</label>
+                             <input type="number" max="14" min="1" class="form-control" name="indirect_income_level"  placeholder="Package Indirect Income Level" value="{{$package->indirect_income_level}}">
+                         </div>
+                         <div class="form-group col-6">
+                             <label class="form-label">Package Product Income</label>
+                             <input type="number" class="form-control" name="product_income"  placeholder="Package Product Income" value="{{$package->product_income}}">
+                         </div>
+                     </div>
+                    <div class="row">
+                         <div class="form-group col-6">
+                             <label class="form-label">Package Expense Income</label>
+                             <input type="number"class="form-control" name="expense_income"  placeholder="Package Expense Income" value="{{$package->expense_income}}">
+                         </div>
+                         <div class="form-group col-6">
+                             <label class="form-label">Package Flash Income</label>
+                             <input type="number" class="form-control" name="flash_income"  placeholder="Package Flash Income" value="{{$package->flash_income}}">
+                         </div>
+                     </div>
+                    <div class="row">
+                         <div class="form-group col-6">
+                             <label class="form-label">Package Reward Income</label>
+                             <input type="number"class="form-control" name="reward_income"  placeholder="Package Reward Income" value="{{$package->reward_income}}">
+                         </div>
+                         <div class="form-group col-6">
+                             <label class="form-label">Package Salary</label>
+                             <input type="number" class="form-control" name="salary"  placeholder="Package Salary" value="{{$package->salary}}">
+                         </div>
+                     </div>
                    <div class="row">
                         <div class="form-group col-6">
                             <label class="form-label">Package Withdraw Limit</label>

@@ -16,11 +16,18 @@ class CreatePackagesTable extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->text('name');
-            $table->float('price')->nullable();
-            $table->float('direct_income')->nullable();
-            $table->float('indirect_income')->nullable();
-            $table->float('withdraw_limit')->nullable();
-            $table->float('income_limit')->nullable();
+            $table->float('price')->default(0)->nullable();
+            $table->float('direct_income')->default(0)->nullable();
+            $table->float('indirect_income')->default(0)->nullable();
+            $table->float('withdraw_limit')->default(0)->nullable();
+            $table->float('income_limit')->default(0)->nullable();
+            $table->float('indirect_income_level')->nullable();
+            $table->float('product_income')->default(0)->nullable();
+            $table->float('expense_income')->default(0)->nullable();
+            $table->float('flash_income')->default(0)->nullable();
+            $table->float('reward_income')->default(0)->nullable();
+            $table->float('loss_income')->default(0)->nullable();
+            $table->float('salary')->default(0)->nullable();
             $table->timestamps();
         });
     }

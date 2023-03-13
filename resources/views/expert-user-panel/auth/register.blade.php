@@ -1,115 +1,94 @@
+<!doctype html>
+<html class="no-js " lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
+<title> Sign Up | {{App\Models\Setting::siteName()}}</title>
+<!-- Favicon-->
+<link rel="icon" href="{{asset('expert-user-panel-template/favicon.ico')}}" type="image/x-icon">
+<!-- Custom Css -->
+<link rel="stylesheet" href="{{asset('expert-user-panel-template/assets/plugins/bootstrap/css/bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{asset('expert-user-panel-template/assets/css/style.min.css')}}">
+<style>
+    .error_message{
+        color:red;
+    }
+    .success_message{
+        color:green;
+    }
+</style>    
+@toastr_css
+</head>
 
-@extends('front.layout.index')
-@section('meta')
-    
-<title>REGISTER | GET 5X</title>
-<meta name="description" content="Multipurpose HTML template.">
-@endsection
+<body class="theme-blush">
 
-@section('content')
-
-<div class="product-big-title-area">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="product-bit-title text-center">
-					<h2>REGISTER</h2>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="single-product-area">
-    <div class="zigzag-bottom"></div>
+<div class="authentication">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <div class="product-content-right">
-                    <div class="woocommerce">
-                        <form enctype="multipart/form-data" action="{{route('user.register')}}" class="checkout" method="post" name="checkout">
-                            @csrf
-                            @if(@$user)
-                                <h1>Refer By : {{@$user->name}}</h1>                                
-                            @endif
-                            <div id="customer_details" class="col2-set">
-                                <div class="col-1">
-                                    <div class="woocommerce-billing-fields">
-                                        <input type="hidden" value="{{$code ?? ''}}" name="code">
-                                        <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                            <label class="" for="billing_first_name">User Name <abbr title="required" class="required">*</abbr>
-                                            </label>
-                                            <input type="text" value="" placeholder="" id="billing_first_name" name="name" class="input-text ">
-                                        </p>
-                                        <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                            <label class="" for="billing_first_name">Email Address <abbr title="required" class="required">*</abbr>
-                                            </label>
-                                            <input type="text" value="" placeholder="" id="billing_first_name" name="email" class="input-text ">
-                                        </p>
-                                        <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                            <label class="" for="billing_first_name">Mobile Phone <abbr title="required" class="required">*</abbr>
-                                            </label>
-                                            <input type="text"  placeholder="" id="billing_first_name" name="phone" class="input-text ">
-                                        </p>
-
-                                        <p id="billing_last_name_field" class="form-row form-row-last validate-required">
-                                            <label class="" for="billing_last_name">Password <abbr title="required" class="required">*</abbr>
-                                            </label>
-                                            <input type="password" value="" placeholder="" id="pwd" minlength="4" name="password" class="input-text ">
-                                        </p>
-                                        <p id="billing_last_name_field" class="form-row form-row-last validate-required">
-                                            <label class="" for="billing_last_name">Confirm Password <abbr title="required" class="required">*</abbr>
-                                            </label>
-                                            <input type="password" value="" placeholder="" id="pwd" minlength="4" name="confirm_password" class="input-text ">
-                                        </p>
-                                        <div class="clear"></div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="order_review" style="position: relative;">
-
-
-                                <div id="payment">
-
-                                    <div class="form-row place-order">
-
-                                        <input type="submit" data-value="Sign Up" value="Sign Up" id="place_order" name="woocommerce_checkout_place_order" class="button alt">
-
-
-                                    </div>
-
-                                    <div class="clear"></div>
-
-                                </div>
-                            </div>
-                        </form>
-
-                    </div>                       
-                </div>                    
-            </div>
-            <div class="col-md-4">
-                
-                <div class="single-sidebar">
-                    <h2 class="sidebar-title">Products</h2>
-                    @foreach(App\Models\Product::orderby('created_at','desc')->get()->take(10) as $product)
-                    <div class="thubmnail-recent">
-                        <img src="{{asset(@$product->images->first()->image)}}" class="recent-thumb" alt="">
-                        <h2><a href="{{route('product.show',str_replace(' ', '_',$product->name))}}">{{@$product->name}}</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>PKR {{@$product->price}}</ins>                         
-                        </div>                             
+            <div class="col-lg-4 col-sm-12">
+                <form class="card auth_form" method="POST" action="{{route('user.register')}}" >
+                    @csrf
+                    <div class="header">
+                        <img class="logo" src="{{asset('expert-user-panel-template/assets/images/logo.svg')}}" alt="">
+                        <h5>Sign Up</h5>
+                        @if(@$user)
+                            <p>Refer By : {{@$user->name}}</p>                                
+                        @endif
                     </div>
-                    @endforeach
+                    <div class="body">
+                        <input type="hidden" value="{{$code ?? ''}}" name="code">
+                        <div class="input-group mb-3">
+                            <input type="text" name="name" class="form-control" placeholder="Username" required value="{{old('name')}}">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="zmdi zmdi-account-circle"></i></span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="email" name="email" class="form-control" placeholder="Email" required value="{{old('email')}}">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="zmdi zmdi-email"></i></span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" name="phone" class="form-control" placeholder="Phone" required value="{{old('phone')}}">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="zmdi zmdi-phone-locked"></i></span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input id="pwd" minlength="4" onkeyup="validatePassword(this.value);" value="{{old('password')}}"  type="password" class="form-control" name="password" placeholder="Password">
+                            <div class="input-group-append">                                
+                                <span class="input-group-text"><i class="zmdi zmdi-lock"></i></span>
+                            </div>    
+                        </div>
+                        <span id="msg"></span>                     
+                        <div class="input-group mb-3">
+                            <input id="confirmpwd" onkeyup="confirmPassword(this.value);" minlength="4" value="{{old('confirm_password')}}" type="password" class="form-control" name="confirm_password" placeholder="Password">
+                            <div class="input-group-append">                                
+                                <span class="input-group-text"><i class="zmdi zmdi-lock"></i></span>
+                            </div>        
+                        </div>
+                        <span id="confirmmsg"></span>
+                        <button type="submit" class="btn btn-primary btn-block waves-effect waves-light">Sign In</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+                <div class="card">
+                    <img src="{{asset('expert-user-panel-template/assets/images/signin.svg')}}" alt="Sign In"/>
                 </div>
             </div>
-            
         </div>
     </div>
 </div>
-@endsection
-@section('scripts')
 
+<!-- Jquery Core Js -->
+<script src="{{asset('expert-user-panel-template/assets/bundles/libscripts.bundle.js')}}"></script>
+<script src="{{asset('expert-user-panel-template/assets/bundles/vendorscripts.bundle.js')}}"></script> <!-- Lib Scripts Plugin Js -->
+@toastr_js
+@toastr_render
 <script>
     function validatePassword(password) {
         
@@ -154,5 +133,28 @@
         document.getElementById("msg").innerHTML = strength;
         document.getElementById("msg").style.color = color;
     }
+    function confirmPassword(password) {
+        
+        // Do not show anything when the length of password is zero.
+        if (password.length === 0) {
+            document.getElementById("confirmmsg").innerHTML = "";
+            return;
+        }
+        // new_password = document.getElementById("pwd").val();
+        new_password =  $('#pwd').val();
+        if(new_password == password)
+        {
+            var strength = "Password Matched";
+            var color = "green";
+        }else{
+            var strength = "Password dont Matched";
+            var color = "red";
+        }
+
+        document.getElementById("confirmmsg").innerHTML = strength;
+        document.getElementById("confirmmsg").style.color = color;
+    }
+    
 </script>
-@endsection
+</body>
+</html>

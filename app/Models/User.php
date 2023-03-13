@@ -20,9 +20,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name','email', 'password','status','left','right','left_refferal','phone',
+        'name','email', 'password','status','left_refferal','phone','refferral_link',
         'right_refferal','left_amount','right_amount','balance','r_earning','refer_type',
-        'refer_by','package_id', 'a_date','image','top_referral','main_owner','auto_wallet','reward_income'
+        'refer_by','package_id', 'a_date','image','top_referral','auto_wallet','reward_income'
     ];
 
     /**
@@ -57,15 +57,15 @@ class User extends Authenticatable
     }
     public function active_refer()
     {
-        return User::where('refer_by',$this->id)->orWhere('main_owner',$this->id)->where('status','active')->get();
+        return User::where('refer_by',$this->id)->where('status','active')->get();
     }
     public function pending_refer()
     {
-        return User::where('refer_by',$this->id)->orWhere('main_owner',$this->id)->where('status','pending')->get();
+        return User::where('refer_by',$this->id)->where('status','pending')->get();
     }
     public function all_refer()
     {
-        return User::where('refer_by',$this->id)->orWhere('main_owner',$this->id)->get();
+        return User::where('refer_by',$this->id)->get();
     }
     public static function status(){
         return (new static)::where('status','active')->get();
@@ -148,18 +148,6 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\User','refer_by');
     }
-	public function main_owner_referral()
-    {
-        return $this->hasMany('App\Models\User','main_owner')->where('right_refferal','!=',null)->where('left_refferal','!=',null);
-    }
-	public function main_owner_right()
-    {
-        return $this->hasMany('App\Models\User','main_owner')->where('right_refferal','!=',null);
-    }
-	public function main_owner_left()
-    {
-        return $this->hasMany('App\Models\User','main_owner')->where('left_refferal','!=',null);
-    }
 	public function refer_by_name($id)
     {
         $user = User::find($id);
@@ -221,13 +209,8 @@ class User extends Authenticatable
             $all_left[] = $left;
             for($i = 0; $i < 100; $i++)
             {
-                if($left->main_owner == null)
-                {
-                    $i = 100;
-                }else{
-                    $left = User::where('left_refferal',$left->id)->orWhere('right_refferal',$left->id)->first();
-                    $all_left[] = $left;
-                }
+                $left = User::where('left_refferal',$left->id)->orWhere('right_refferal',$left->id)->first();
+                $all_left[] = $left;
             } 
         }
         return $all_left;
@@ -241,13 +224,8 @@ class User extends Authenticatable
             $all_right[] = $right;
             for($i = 0; $i < 100; $i++)
             {
-                if($right->main_owner == null)
-                {
-                    $i = 100;
-                }else{
-                    $right = User::where('right_refferal',$right->id)->orWhere('left_refferal',$right->id)->first();
-                    $all_right[] = $right;
-                }
+                $right = User::where('right_refferal',$right->id)->orWhere('left_refferal',$right->id)->first();
+                $all_right[] = $right;
             } 
         }
         return $all_right;
@@ -357,5 +335,191 @@ class User extends Authenticatable
             return true;
         }
         
+    }
+    public function level_1()
+    {
+        $users = [];
+        if($this->left_refferal)
+            $users[] = $this->left_refferal;
+        if($this->right_refferal)
+            $users[] = $this->right_refferal;
+        return $users;
+    }
+    public function level_2()
+    {
+        $old_users = User::whereIn('id',$this->level_1())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_3()
+    {
+        $old_users = User::whereIn('id',$this->level_2())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_4()
+    {
+        $old_users = User::whereIn('id',$this->level_3())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_5()
+    {
+        $old_users = User::whereIn('id',$this->level_4())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_6()
+    {
+        $old_users = User::whereIn('id',$this->level_5())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_7()
+    {
+        $old_users = User::whereIn('id',$this->level_6())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_8()
+    {
+        $old_users = User::whereIn('id',$this->level_7())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_9()
+    {
+        $old_users = User::whereIn('id',$this->level_8())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_10()
+    {
+        $old_users = User::whereIn('id',$this->level_9())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_11()
+    {
+        $old_users = User::whereIn('id',$this->level_10())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_12()
+    {
+        $old_users = User::whereIn('id',$this->level_11())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_13()
+    {
+        $old_users = User::whereIn('id',$this->level_12())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function level_14()
+    {
+        $old_users = User::whereIn('id',$this->level_13())->get();
+        $users = [];
+        foreach($old_users as $old_user)
+        {
+            if($old_user->left_refferal)
+                $users[] = $old_user->left_refferal;
+            if($old_user->right_refferal)
+                $users[] = $old_user->right_refferal;
+        }
+        return $users;
+    }
+    public function notInTree()
+    {
+        $user = User::where('left_refferal',$this->id)->orWhere('right_refferal',$this->id)->first();
+        if($user)
+            return false;
+        else
+            return true;
     }
 }

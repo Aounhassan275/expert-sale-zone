@@ -19,6 +19,8 @@ class CreateEarningsTable extends Migration
             $table->string('type');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('due_to');
+            $table->foreign('due_to')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

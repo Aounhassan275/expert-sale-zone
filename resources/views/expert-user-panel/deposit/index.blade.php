@@ -10,7 +10,7 @@ Deposit in {{$payment->method}}
                 <form enctype="multipart/form-data" action="{{route('user.deposit.store')}}" method="post" >
                 @csrf
                     <input type="hidden" name="package_id" value="{{$package->id}}">
-                    <input type="hidden" name="method" value="{{$payment}}">
+                    <input type="hidden" name="payment" value="{{$payment->method}}">
                     <div class="row clearfix">
                         <div class="col-sm-4">
                             <div class="form-group">           

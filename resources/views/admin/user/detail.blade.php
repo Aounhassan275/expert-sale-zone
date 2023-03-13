@@ -120,7 +120,7 @@
             </div>   
         </div>
         @endif
-        @if ($user->main_owner)
+        {{-- @if ($user->main_owner)
             <div class="row">
                 <div class="col-12 col-sm-6 col-xl d-flex">
                     <div class="card flex-fill">
@@ -192,7 +192,7 @@
                 </div>
             </div>
             @endforeach
-        @endif
+        @endif --}}
         <div class="tab-content">
             <div class="tab-pane fade show active" id="account" role="tabpanel">
                 <div class="card">

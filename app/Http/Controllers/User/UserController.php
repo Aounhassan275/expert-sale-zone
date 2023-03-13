@@ -87,7 +87,7 @@ class UserController extends Controller
             ]);
         }
         $user->update($request->except('password'));
-        toastr()->warning('Your Informations Updated successfully');
+        toastr()->success('Your Informations Updated successfully');
         return redirect()->back();
     }
 
@@ -106,18 +106,10 @@ class UserController extends Controller
         $main_user = Auth::user();
         if($main_user->checkStatus() == 'expired')   
         {
-          toastr()->warning('Your Package is Expire');
+          toastr()->error('Your Package is Expire');
            return redirect(route('user.dashboard.index'));
         }
-        if($request->status == 1)
-        {
-            $referrals = User::whereNotNull('a_date')->where('refer_by',$main_user->id)->orWhere('main_owner',$main_user->id)->orderBy('created_at','DESC')->paginate();
-        }elseif($request->status == 2)
-        {
-            $referrals = User::whereNull('a_date')->where('refer_by',$main_user->id)->orWhere('main_owner',$main_user->id)->orderBy('created_at','DESC')->paginate();
-        }else{
-            $referrals = User::where('refer_by',$main_user->id)->orWhere('main_owner',$main_user->id)->orderBy('created_at','DESC')->paginate();
-        }
+        $referrals = User::where('refer_by',$main_user->id)->orderBy('created_at','DESC')->paginate();
         return view($this->directory.'.refer.index')->with('main_user',$main_user)->with('referrals',$referrals);
     }
     public function refferral_detail(Request $request,$id)
@@ -125,7 +117,7 @@ class UserController extends Controller
         $main_user = User::find($id);
         if($main_user->checkStatus() == 'expired')   
         {
-          toastr()->warning('User Package is Expire');
+          toastr()->error('User Package is Expire');
            return redirect(route('user.dashboard.index'));
         }
         if($request->status == 1)
@@ -144,7 +136,7 @@ class UserController extends Controller
         $main_user = User::find($id);
         if($main_user->checkStatus() == 'expired')   
         {
-          toastr()->warning('User Package is Expire');
+          toastr()->error('User Package is Expire');
            return redirect(route('user.dashboard.index'));
         }
         return view($this->directory.'.refer.left_refferal')->with('main_user',$main_user);
@@ -154,7 +146,7 @@ class UserController extends Controller
         $main_user = User::find($id);
         if($main_user->checkStatus() == 'expired')   
         {
-          toastr()->warning('User Package is Expire');
+          toastr()->error('User Package is Expire');
            return redirect(route('user.dashboard.index'));
         }
         return view($this->directory.'.refer.right_refferal')->with('main_user',$main_user);
@@ -164,7 +156,7 @@ class UserController extends Controller
         $user = User::find($id);
         if($user->checkStatus() == 'expired')   
         {
-          toastr()->warning('Your Package is Expire');
+          toastr()->error('Your Package is Expire');
            return redirect(route('user.dashboard.index'));
         }
         $company_account= CompanyAccount::find(1);

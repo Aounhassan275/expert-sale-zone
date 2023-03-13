@@ -48,11 +48,11 @@ class WithdrawController extends Controller
         $user = Auth::user();
         
         if($request->payment < 150){
-              toastr()->warning('Withdraw Not Allowed.Not Less than 150.');
+              toastr()->error('Withdraw Not Allowed.Not Less than 150.');
               return redirect()->back();
           }
           if($request->payment > $user->balance){
-                toastr()->warning('Not enough balance');
+                toastr()->error('Not enough balance');
                 return redirect()->back();
             }
         $limit = $user->package->withdraw_limit;
@@ -61,7 +61,7 @@ class WithdrawController extends Controller
         $total_withdraw = $total_withdraw + $pending_withdraw;
         if($request->payment > $limit || $total_withdraw > $limit)
         {
-            toastr()->warning('Your Withdraw Limit is Exceeded.');
+            toastr()->error('Your Withdraw Limit is Exceeded.');
             return redirect()->back();
         }
           Withdraw::create([
@@ -72,7 +72,7 @@ class WithdrawController extends Controller
           $user->update([
               'balance' => $user->balance - $request->payment,    
           ]);
-          toastr()->warning('Withdraw Request is Submit Successfully');
+          toastr()->success('Withdraw Request is Submit Successfully');
           return redirect()->back();
     }
 
@@ -109,7 +109,7 @@ class WithdrawController extends Controller
     {
         $withdraw = Withdraw::find($id);
         $withdraw->update($request->all());
-        toastr()->warning('Withdraw Informations Updated successfully');
+        toastr()->success('Withdraw Informations Updated successfully');
         return redirect()->back();
     }
 
@@ -121,8 +121,8 @@ class WithdrawController extends Controller
      */
     public function destroy(Withdraw $withdraw)
     {
-                $withdraw->delete();
-        toastr()->warning('Your Withdraw Request is Deleted Successfully');
+        $withdraw->delete();
+        toastr()->success('Your Withdraw Request is Deleted Successfully');
         return redirect()->back();
     }
 }

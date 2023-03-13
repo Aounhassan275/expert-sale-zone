@@ -33,16 +33,14 @@ class UserSeeder extends Seeder
             [ 'name' => 'user1',
             'email' => 'user1@mail.com',
             'password' => Hash::make('1234'),
-            'left' => uniqid(),
-            'right' => uniqid(),
+            'refferral_link' => uniqid(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()],
             
             ['name' => 'user2',
             'email' => 'user2@mail.com',
             'password' => Hash::make('1234'),
-            'left' => uniqid(),
-            'right' => uniqid(),
+            'refferral_link' => uniqid(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()],
         ]);
@@ -51,6 +49,12 @@ class UserSeeder extends Seeder
         ]);
         DB::table('settings')->insert([
             ['name' => 'Site Name','value' => 'Expert Sale Zone'],
+            ['name' => 'Phone','value' => '923XXXXXXXX'],
+            ['name' => 'Email','value' => 'dummy@mail.com'],
+            ['name' => 'Facebook','value' => 'facebook.com'],
+            ['name' => 'Twitter','value' => 'twitter.com'],
+            ['name' => 'Youtube','value' => 'twitter.com'],
+            ['name' => 'Instagram','value' => 'Instagram.com'],
         ]);
         DB::table('company_accounts')->insert([
             ['name' => 'Matching Income'],

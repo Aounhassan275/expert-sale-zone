@@ -5,234 +5,138 @@ namespace App\Helpers;
 use App\Models\CompanyAccount;
 use App\Models\Earning;
 use App\Models\User;
+use Exception;
 
 class RefferralHelper
 {
-    public static function DirectLeftRefferral($user,$refer_by,$direct_income,$matching_income)
+
+    public static function addUserInTree($user,$package,$refer_by)
     {
-        $e_wallet_direct = $direct_income/100 * 80;
-        $auto_direct = $direct_income/100 * 20;
-        if($refer_by->left_refferal == null)
+        try{
+            if(count($refer_by->level_1()) < config('services.levels.1'))
+            {
+                RefferralHelper::addUserinLevel_1($user,$package,$refer_by);
+            }else if(count($refer_by->level_2()) < config('services.levels.2'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_1())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+            }else if(count($refer_by->level_3()) < config('services.levels.3'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_2())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+    
+            }else if(count($refer_by->level_4()) < config('services.levels.4'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_3())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+    
+            }else if(count($refer_by->level_5()) < config('services.levels.5'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_4())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+    
+            }else if(count($refer_by->level_6()) < config('services.levels.6'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_5())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+    
+            }else if(count($refer_by->level_7()) < config('services.levels.7'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_6())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+    
+            }else if(count($refer_by->level_8()) < config('services.levels.8'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_7())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+                
+            }else if(count($refer_by->level_9()) < config('services.levels.9'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_8())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+                
+            }else if(count($refer_by->level_10()) < config('services.levels.10'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_9())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+                
+            }else if(count($refer_by->level_11()) < config('services.levels.11'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_10())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+                
+            }else if(count($refer_by->level_12()) < config('services.levels.12'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_11())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+                
+            }else if(count($refer_by->level_13()) < config('services.levels.13'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_12())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+                
+            }else if(count($refer_by->level_14()) < config('services.levels.14'))
+            {
+                $old_users = User::whereIn('id',$refer_by->level_13())->get();
+                RefferralHelper::addUserinLevels($user,$package,$refer_by,$old_users);
+                
+            };
+            return true;
+        }catch(Exception $e)
         {
-            $refer_by->update([
-                'left_refferal' => $user->id,
-                'balance' => $refer_by->balance += $e_wallet_direct,
-                'auto_wallet' => $refer_by->auto_wallet += $auto_direct,
-                'r_earning' => $refer_by->r_earning += $direct_income,
-                'left_amount' => $matching_income,
-            ]);
-            $user->update([
-                'top_referral' => 'Done',
-            ]);
-            Earning::create([
-                "user_id" => $refer_by->id,
-                "price" => $direct_income,
-                "type" => 'direct_income'
-            ]);
-            
-            if(!$user->package)
-            {
-                $all_lefts = $user->getOrginalUpperLeft();
-                foreach($all_lefts as $key =>  $upper_left)
-                {
-                    if(!$upper_left->incomeLimit() && $upper_left->balance >= 2000)
-                    {
-                        $flash_income= CompanyAccount::flash_income();
-                        $flash_income->update([
-                            'balance' => $flash_income->balance += $matching_income,
-                        ]);
-                    }else{
-                        if($key == 0)
-                        {
-                            $upper_left->matchingEarning($user->id,$matching_income);
-                        }else{
-                            $upper_left->matchingEarning($all_lefts[$key-1]->id,$matching_income);
-                        }
-                        RefferralHelper::ownerMatching($upper_left);
-                    }
-                }
-            }
-        }else{
-            $left = last($refer_by->getOrginalLeft());
-            $left->update([
-                'left_refferal' => $user->id,
-            ]);
-            $refer_by->update([
-                'balance' => $refer_by->balance += $e_wallet_direct,
-                'auto_wallet' => $refer_by->auto_wallet += $auto_direct,
-                'r_earning' => $refer_by->r_earning += $direct_income,
-                // 'left_amount' => $matching_income,
-            ]);
-            $user->update([
-                'top_referral' => 'Done',
-            ]);
-            Earning::create([
-                "user_id" => $refer_by->id,
-                "price" => $direct_income,
-                "type" => 'direct_income'
-            ]);
-            
-            if(!$user->package)
-            {
-                $all_lefts = $user->getOrginalUpperLeft();
-                foreach($all_lefts as $key =>  $upper_left)
-                {
-                    if(!$upper_left->incomeLimit() && $upper_left->balance >= 2000)
-                    {
-                        $flash_income= CompanyAccount::flash_income();
-                        $flash_income->update([
-                            'balance' => $flash_income->balance += $matching_income,
-                        ]);
-                    }else{
-                        if($key == 0)
-                        {
-                            $upper_left->matchingEarning($user->id,$matching_income);
-                        }else{
-                            $upper_left->matchingEarning($all_lefts[$key-1]->id,$matching_income);
-                        }
-                        RefferralHelper::ownerMatching($upper_left);
-                    }
-                }
-            }
+            info("Add User In Tree : ".$e->getMessage());
+            return false;
         }
     } 
-    public static function DirectRightRefferral($user,$refer_by,$direct_income,$matching_income)
+    public static function addUserinLevel_1($user,$package,$refer_by)
     {
-        if($refer_by->right_refferal == null)
+        if(!$refer_by->left_refferal)
         {
             $refer_by->update([
-                'right_refferal' => $user->id,
-                'balance' => $refer_by->balance += $direct_income/100 * 80,
-                'auto_wallet' => $refer_by->auto_wallet += $direct_income/100 * 20,
-                'r_earning' => $refer_by->r_earning += $direct_income,
-                // 'right_amount' => $matching_income,
+                'left_refferal' => $user->id, 
+                'balance' => $refer_by->balance + $package->direct_income, 
             ]);
-            $user->update([
-                'top_referral' => 'Done',
-            ]);
-            Earning::create([
-                "user_id" => $refer_by->id,
-                "price" => $direct_income,
-                "type" => 'direct_income'
-            ]);
-            if(!$user->package)
-            {
-                $all_rights = $user->getOrginalUpperRight();
-                foreach($all_rights as $key =>  $upper_right)
-                {
-                    if(!$upper_right->incomeLimit() && $upper_right->balance >= 2000)
-                    {
-                        $flash_income= CompanyAccount::flash_income();
-                        $flash_income->update([
-                            'balance' => $flash_income->balance += $matching_income,
-                        ]);
-                    }else{
-                        if($key == 0)
-                        {
-                            $upper_right->matchingEarning($user->id,$matching_income);
-                        }else{                    
-                            $upper_right->matchingEarning($all_rights[$key-1]->id,$matching_income);
-                        }
-                        RefferralHelper::ownerMatching($upper_right);
-                    }
-                }
-
-            }
-            
-        }
-        else{
-            $right = last($refer_by->getOrginalRight());
-            $right->update([
-                'right_refferal' => $user->id,
-            ]);
-            
+        }else{
             $refer_by->update([
-                'balance' => $refer_by->balance += $direct_income/100 * 80,
-                'auto_wallet' => $refer_by->auto_wallet += $direct_income/100 * 20,
-                'r_earning' => $refer_by->r_earning += $direct_income,
-                // 'right_amount' => $matching_income,
+                'right_refferal' => $user->id, 
+                'balance' => $refer_by->balance + $package->direct_income, 
             ]);
-            Earning::create([
-                "user_id" => $refer_by->id,
-                "price" => $direct_income,
-                "type" => 'direct_income'
-            ]);
-            $user->update([
-                'top_referral' => 'Done',
-            ]);
-            if(!$user->package)
-            {
-                $all_rights = $user->getOrginalUpperRight();
-                foreach($all_rights as $key =>  $upper_right)
-                {
-                    if(!$upper_right->incomeLimit() && $upper_right->balance >= 2000)
-                    {
-                        $flash_income= CompanyAccount::flash_income();
-                        $flash_income->update([
-                            'balance' => $flash_income->balance += $matching_income,
-                        ]);
-                    }else{
-                        if($key == 0)
-                        {
-                            $upper_right->matchingEarning($user->id,$matching_income);
-                        }else{                    
-                            $upper_right->matchingEarning($all_rights[$key-1]->id,$matching_income);
-                        }
-                        RefferralHelper::ownerMatching($upper_right);
-                    }
-                }
-
-            }
+            
         }
+        Earning::create([
+            'due_to' => $user->id, 
+            'user_id' => $refer_by->id, 
+            'price' => $package->direct_income, 
+            'type' => 'direct_income', 
+        ]);
     }
-    public static function ownerMatching($chain)
+    public static function addUserinLevels($user,$package,$refer_by,$old_users)
     {
-        if($chain->left_amount > $chain->right_amount)
+        foreach($old_users as $old_user)
         {
-            $orginal_amount = $chain->right_amount;
-            $amount = $chain->right_amount*2;
-            if($amount > 0)
+            if(!$old_user->left_refferal)
             {
-                $chain->update([
-                    'right_amount' => 0, 
-                    'left_amount' => $chain->left_amount -= $orginal_amount, 
-                    'balance' => $chain->balance += $amount/100 * 80,
-                    'auto_wallet' => $chain->auto_wallet += $amount/100 * 20,
-                    'r_earning' => $chain->r_earning += $amount,
+                $old_user->update([
+                    'left_refferal' => $user->id, 
                 ]);
-                Earning::create([
-                    "user_id" => $chain->id,
-                    "price" => $amount,
-                    "type" => 'matching_income'
-                ]);
-                $matching_income= CompanyAccount::matching_income();
-                $matching_income->update([
-                    'balance' => $matching_income->balance -= $amount,
-                ]);
+                break;
+            }else if(!$old_user->right_refferal){
+                $old_user->update([
+                    'right_refferal' => $user->id, 
+                ]);  
+                break;              
             }
-        }else if($chain->right_amount > $chain->left_amount)
-        {
-            $orginal_amount = $chain->left_amount;
-            $amount = $chain->left_amount*2;
-            if($amount > 0)
-            {
-                $chain->update([
-                    'right_amount' => $chain->right_amount -= $orginal_amount, 
-                    'left_amount' => 0, 
-                    'balance' => $chain->balance += $amount/100 * 80,
-                    'auto_wallet' => $chain->auto_wallet += $amount/100 * 20,
-                    'r_earning' => $chain->r_earning += $amount,
-                ]);
-                Earning::create([
-                    "user_id" => $chain->id,
-                    "price" => $amount,
-                    "type" => 'matching_income'
-                ]);
-                $matching_income= CompanyAccount::matching_income();
-                $matching_income->update([
-                    'balance' => $matching_income->balance -= $amount,
-                ]);
-            }
+
         }
+        $refer_by->update([
+            'balance' => $refer_by->balance + $package->direct_income, 
+        ]);
+        
+        Earning::create([
+            'due_to' => $user->id, 
+            'user_id' => $refer_by->id, 
+            'price' => $package->direct_income, 
+            'type' => 'direct_income', 
+        ]);
     }
 }

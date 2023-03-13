@@ -70,48 +70,20 @@ class AuthController extends Controller
         if($request->code)
         { 
          
-            $user= User::where('left',$request->code)
-            ->orWhere('right',$request->code)->first();
+            $user= User::where('refferral_link',$request->code)->first();
             if($user){
-            //     $user->balance+= (($user->package->r_earning/100)*$user->package->price);
-            //     $user->save();
-           
                 $validator = Validator::make($request->all(),[
                     'name' => 'required|unique:users'
                 ]);
-                
                 if($validator->fails()){
-                    toastr()->warning('Username  already exists');
+                    toastr()->error('Username  already exists');
                     return redirect()->back();
                 }
-                if($user->main_owner)
-                {
-                    $main_owner = $user->main_owner;
-                }
-                else{
-                    $main_owner = $user->id;
-                }
-                if($user->left == $request->code)
-                {
-                
-                    User::create([
-                        'left' => uniqid(),
-                        'right' => uniqid(),
-                        'refer_by' => $user->id,
-                        'main_owner' => $main_owner,
-                        'refer_type' => 'Left',
-                        'balance' => 0,
-                    ]+$request->all());
-                }else{
-                    User::create([
-                        'left' => uniqid(),
-                        'right' => uniqid(),
-                        'refer_by' => $user->id,
-                        'refer_type' => 'Right',
-                        'main_owner' => $main_owner,
-                        'balance' => 0,
-                    ]+$request->all());
-                }
+                User::create([
+                    'refferral_link' => uniqid(),
+                    'refer_by' => $user->id,
+                    'balance' => 0,
+                ]+$request->all());
                 
             }
         }else{
@@ -120,31 +92,24 @@ class AuthController extends Controller
             ]);
 
             if($validator->fails()){
-                toastr()->warning('Username  already exists');
+                toastr()->error('Username  already exists');
                 return redirect()->back();
             }
-            toastr()->warning('Contact Support.');
+            toastr()->error('Contact Support.');
             return redirect()->back();
-            User::create([
-                'left' => uniqid(),
-                'right' => uniqid(),
-                'balance' => 0,
-            ]+$request->all());
-            
         }
-        toastr()->warning('Your Account Has Been successfully Created, Please Login and See Next Step Guides.');
+        toastr()->success('Your Account Has Been successfully Created, Please Login and See Next Step Guides.');
         return redirect(route('user.login'));
     }
     public function code($code)
     {
-        $user= User::where('left',$code)
-        ->orWhere('right',$code)->first();
-        return view('user.auth.register')->with('code',$code)->with('user',$user);
+        $user= User::where('refferral_link',$code)->first();
+        return view($this->directory.'.auth.register')->with('code',$code)->with('user',$user);
     }
     public function logout()
     {
         Auth::logout();
-        toastr()->warning('You Logout Successfully');
+        toastr()->success('You Logout Successfully');
         return redirect('/');
     }
 
